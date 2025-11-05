@@ -1,0 +1,18 @@
+Design Normalization
+
+The database schema is designed to manage, sort and handle housing rentals in a normalized manner.
+The four entities are Students, Buildings, Rooms and Contracts which are essential for this system
+to operate. Primary keys are highlighted and identified. Foreign keys are established as well. 
+Rooms belong to Buildings and Contracts are signed by Students and linked to specific rooms. 
+
+Normalization was applied:
+> 1NF - all attributes are atomic (e.g., studentID per student)
+> 2NF - non-key attributes depend fully on the PK
+> 3NF - transitive dependencies were removed (e.g., Building manager is stored in Buildings, not Rooms)
+
+Constraints:
+> Student - can't exceed their max_budget
+> Rooms - can't have invalid capacities/rents
+> Contracts - must have valid start_date, end_date, room_id and unique constraint which prevents double booking of room
+
+This design is scalable and supports future expansion.

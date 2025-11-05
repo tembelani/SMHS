@@ -1,0 +1,54 @@
+
+-- Students Table
+CREATE TABLE Students (
+    student_id INT PRIMARY KEY AUTO_INCREMENT,
+    fullName VARCHAR(100) NOT NULL,
+    emailAdd VARCHAR(100) NOT NULL UNIQUE,
+    phoneNumber VARCHAR(15) NOT NULL,
+    courseEnrolled VARCHAR(100) NOT NULL,
+    max_budget DECIMAL(10, 2) CHECK (max_budget >= 0)
+    
+);
+
+-- Building Table 
+CREATE TABLE Buildings (
+    building_id INT AUTO_INCREMENT PRIMARY KEY,
+    building_name VARCHAR(100) NOT NULL,
+    buildingAddress VARCHAR(200) NOT NULL,
+    buildingManager VARCHAR(100) 
+);
+
+-- Rooms Table
+CREATE TABLE Rooms (
+    room_id INT PRIMARY KEY AUTO_INCREMENT,
+    room_number VARCHAR(30) NOT NULL,
+    capacity INT CHECK (capacity > 0),
+    avail BOOLEAN NOT NULL DEFAULT TRUE,
+    rent DECIMAL(10, 2) NOT NULL CHECK (rent >= 0),
+    building_id INT,
+    FOREIGN KEY (building_id) REFERENCES Building(building_id)
+    
+);
+
+-- Contracts Table
+CREATE TABLE Contracts(
+    contract_id INT PRIMARY KEY AUTO_INCREMENT,
+    student_id INT,
+    room_id INT,
+    start_date DATE NOT NULL,
+    end_start DATE NOT NULL,
+    monthy_rent DECIMAL(10, 2) NOT NULL CHECK (monthy_rent >= 0),
+    FOREIGN KEY (student_id) REFERENCES Students(student_id),
+    FOREIGN KEY (room_id) REFERENCES Rooms(room_id),
+    CONSTRAINT chk_dates CHECK (start_date < end_start),
+    CONSTRAINT unique_booking UNIQUE (room_id, start_date, end_start)
+
+);
+
+CHECK (NOT EXISTS (
+    SELECT 1 FROM Contract c1
+    JOIN Contract c2 on c1.room_id = c2.roo_id
+    WHERE c1.contract_id <> c2.contract_id
+    AND c1.start_date <= c2.end_date
+    AND c2.start_date <= c1.end_date
+));
